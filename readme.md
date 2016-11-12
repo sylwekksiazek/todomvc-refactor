@@ -1,14 +1,71 @@
-# Clone of [todomvc-jquery@7d5d1260](https://github.com/tastejs/todomvc/tree/7d5d1260142736d992867a6138dad48e2fca4847/examples/jquery)
+# run
 
-# install
-
-Fetch dependencies:
+* install dependencies:
 
     npm install
 
+* serve original javascript sources:
+
+    npm run hs
+
+* develop with `webpack-dev-server`:
+
+    npm start
+
+# compile
+
+    npm run compile
+
 # run
 
-    npm run hs # http://localhost:8080
+* bundle for production with `webpack`:
+
+    npm run build
+
+* open in browser: http://localhost:8080
+
+# resetting todo collection
+
+```js
+const todos = [
+  {
+    id: "19f933ad-2872-48a9-83bc-99c96ec75ca1",
+    title: "learn JS",
+    completed: false
+  },
+  {
+    id: "47db8ec5-14a9-45ed-81c9-665d35cffbaf",
+    title: "learn redux",
+    completed: false
+  },
+  {
+    id: "b4af5fdc-84d5-4f3d-9cdd-48a971538c73",
+    title: "buy beer",
+    completed: true
+  },
+  {
+    id: "b0341f90-18d5-4ca3-a3ac-4292ff034bca",
+    title: "profit :]",
+    completed: false
+  }
+]
+
+localStorage.setItem('todos-jquery', JSON.stringify(todos));
+```
+
+# installing types
+
+When installing types, note that `jquery` used here is version 2, as well
+as handlebars. Therefore, when installing `@types`, don't just install
+the most recent version. Stick to e.g.:
+  * `@types/jquery@2`
+  * `@types/handlebars@3`
+
+They reflect these (older) versions of the libraries. Otherwise, you can use
+the latest `@types` - but then you need to bump up versions of actual
+`jquery` and `handlebars`. The typings for the libraries must match their versions.
+
+# Clone of [todomvc-jquery@7d5d1260](https://github.com/tastejs/todomvc/tree/7d5d1260142736d992867a6138dad48e2fca4847/examples/jquery)
 
 *original readme below...*
 
