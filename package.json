@@ -1,10 +1,20 @@
 {
+  "name": "typescript-refactor",
   "private": true,
+  "scripts": {
+    "hs": "hs"
+  },
   "dependencies": {
     "todomvc-common": "~1.0.1",
     "todomvc-app-css": "~1.0.1",
     "jquery": "~2.1.1",
     "handlebars": "~2.0.0",
     "director": "~1.2.2"
+  },
+  "devDependencies": {
+    "http-server": "^0.9.0",
+    "tslint": "^3.15.1",
+    "typescript": "^2.0.9",
+    "typings": "^2.0.0"
   }
 }

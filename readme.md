@@ -1,5 +1,17 @@
 # Clone of [todomvc-jquery@7d5d1260](https://github.com/tastejs/todomvc/tree/7d5d1260142736d992867a6138dad48e2fca4847/examples/jquery)
 
+# install
+
+Fetch dependencies:
+
+    npm install
+
+# run
+
+    npm run hs # http://localhost:8080
+
+*original readme below...*
+
 ----
 
 # jQuery TodoMVC Example
