@@ -10,6 +10,36 @@ Fetch dependencies:
 
     npm run hs # http://localhost:8080
 
+
+# resetting todo collection
+
+```js
+const todos = [
+  {
+    id: "19f933ad-2872-48a9-83bc-99c96ec75ca1",
+    title: "learn JS",
+    completed: false
+  },
+  {
+    id: "47db8ec5-14a9-45ed-81c9-665d35cffbaf",
+    title: "learn redux",
+    completed: false
+  },
+  {
+    id: "b4af5fdc-84d5-4f3d-9cdd-48a971538c73",
+    title: "buy beer",
+    completed: true
+  },
+  {
+    id: "b0341f90-18d5-4ca3-a3ac-4292ff034bca",
+    title: "profit :]",
+    completed: false
+  }
+]
+
+localStorage.setItem('todos-jquery', JSON.stringify(todos));
+```
+
 *original readme below...*
 
 ----
