@@ -5,6 +5,7 @@ const $ = jQuery;
 
 import * as util from './utils'
 import { store } from './store'
+import * as http from './http'
 
 /*global jQuery, Handlebars, Router */
 // jQuery(function ($) {

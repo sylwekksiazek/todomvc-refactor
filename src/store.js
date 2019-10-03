@@ -7,3 +7,9 @@ export const store = {
     return localStorage.setItem(key, JSON.stringify(value));
   }
 }
+
+//
+//
+// export getStore(type) {
+// 	return type === 'local' ?
+// }
