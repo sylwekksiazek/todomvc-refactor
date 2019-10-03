@@ -1,3 +1,7 @@
+/// <reference path="../node_modules/@types/jquery/index.d.ts" />
+/// <reference path="../node_modules/@types/handlebars/index.d.ts" />
+/// <reference path="../node_modules/@types/q/index.d.ts" />
+
 declare const Router: any;
 
 /*global jQuery, Handlebars, Router */
