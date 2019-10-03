@@ -10,7 +10,7 @@ module.exports = {
     html: "./index.html",
   },
   output: {
-    filename: "dist/app.js" // "dist/[name].js"
+    filename: "dist/app.js" // "dist/[name].src"
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.ts', '.js']
