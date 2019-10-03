@@ -1,8 +1,10 @@
 import jQuery from 'jquery'
 import Handlebars from 'handlebars'
 import { Router } from 'director/build/director'
-import util from 'utils'
-import store from 'store'
+const $ = jQuery;
+
+import * as util from './utils'
+import { store } from './store'
 
 /*global jQuery, Handlebars, Router */
 // jQuery(function ($) {
@@ -39,7 +41,7 @@ import store from 'store'
 
 var App = {
 	init: function () {
-		this.todos = util.store('todos-jquery');
+		this.todos = store.get('todos-jquery');
 		this.todoTemplate = Handlebars.compile($('#todo-template').html());
 		this.footerTemplate = Handlebars.compile($('#footer-template').html());
 		this.bindEvents();
@@ -69,7 +71,7 @@ var App = {
 		$('#toggle-all').prop('checked', this.getActiveTodos().length === 0);
 		this.renderFooter();
 		$('#new-todo').focus();
-		util.store('todos-jquery', this.todos);
+		store.set('todos-jquery', this.todos);
 	},
 	renderFooter: function () {
 		var todoCount = this.todos.length;

@@ -1,8 +1,9 @@
-export const store = (namespace, data) => {
-  if (arguments.length > 1) {
-    return localStorage.setItem(namespace, JSON.stringify(data));
-  } else {
-    var store = localStorage.getItem(namespace);
-    return (store && JSON.parse(store)) || [];
+export const store = {
+  get: (key) => {
+    var state = localStorage.getItem(key);
+    return (state && JSON.parse(state)) || [];
+  },
+  set: (key, value) => {
+    return localStorage.setItem(key, JSON.stringify(value));
   }
 }
