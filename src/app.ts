@@ -2,7 +2,7 @@
 /// <reference path="../node_modules/@types/handlebars/index.d.ts" />
 /// <reference path="../node_modules/@types/q/index.d.ts" />
 
-import { deleteTodo, getTodos } from './http';
+import { deleteTodo, getTodos, updateTodo } from './http';
 
 declare const Router: any;
 
@@ -11,19 +11,19 @@ import { getStorage } from './storageManager'
 import { TodoDataModel } from './utils';
 // import * as http from './http'
 
-const StorageType = "LS"; // "HTTP"
+const StorageType = 'LS'; // "HTTP"
 
 /*global jQuery, Handlebars, Router */
 // jQuery(function ($) {
-	'use strict';
+'use strict';
 
-	Handlebars.registerHelper('eq', function (a, b, options) {
-		return a === b ? options.fn(this) : options.inverse(this);
-	});
+Handlebars.registerHelper('eq', function (a, b, options) {
+	return a === b ? options.fn(this) : options.inverse(this);
+});
 
-	var ENTER_KEY = 13;
-	var ESCAPE_KEY = 27;
-	var storage = getStorage(StorageType);
+var ENTER_KEY = 13;
+var ESCAPE_KEY = 27;
+var storage = getStorage(StorageType);
 
 var App = {
 	todos: [],
@@ -160,9 +160,11 @@ var App = {
 		}
 	},
 	update: function (e) {
-		var el = e.target;
-		var $el = $(el);
-		var val = $el.val().trim();
+		const el = e.target;
+		const $el = $(el);
+		const val = $el.val().trim();
+		const idx = this.indexFromEl(el);
+		const id = this.todos[idx].id;
 
 		if (!val) {
 			this.destroy(e);
@@ -172,10 +174,12 @@ var App = {
 		if ($el.data('abort')) {
 			$el.data('abort', false);
 		} else {
-			this.todos[this.indexFromEl(el)].title = val;
+			this.todos[idx].title = val;
+			updateTodo(id, this.todos[idx]).then(() => {
+				this.render()
+			})
 		}
 
-		this.render();
 	},
 	destroy: function (e) {
 		const idx = this.indexFromEl(e.target);
