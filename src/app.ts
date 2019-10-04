@@ -188,12 +188,20 @@ var App = {
 	},
 	destroy: function (e) {
 		const idx = this.indexFromEl(e.target);
+		const $el:any = $(e.target);
 		const id = this.todos[idx].id;
 
+		$el.parent().parent()[0].style.display = 'none';
+
 		deleteTodo(id)
-			.then(() => {
+			.then(
+			() => {
 				this.todos.splice(idx, 1)
 				this.render();
+			},
+			() => {
+				alert('Delete failed');
+				$el.parent().parent()[0].style.display = 'block';
 			});
 
 
