@@ -32,3 +32,12 @@ export const updateTodo = async (id, data) => {
     });
     return response.json();
 }
+
+// TODO: Fixme :(
+export const updateTodos = async (data) => {
+	const response = await fetch('http://localhost:3000/todos', {
+		method: 'PUT',
+		body: data
+	});
+	return response.json();
+}

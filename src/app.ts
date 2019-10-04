@@ -2,7 +2,7 @@
 /// <reference path="../node_modules/@types/handlebars/index.d.ts" />
 /// <reference path="../node_modules/@types/q/index.d.ts" />
 
-import { deleteTodo, getTodos, updateTodo } from './http';
+import { createTodo, deleteTodo, getTodos, updateTodo, updateTodos } from './http';
 
 declare const Router: any;
 
@@ -80,8 +80,10 @@ var App = {
 		this.todos.forEach(function (todo) {
 			todo.completed = isChecked;
 		});
-		storage.set(this.todos);
-		this.render();
+		updateTodos(this.todos).then(() => {
+			storage.set(this.todos);
+			this.render();
+		})
 	},
 	getActiveTodos: function () {
 		return this.todos.filter(function (todo) {
@@ -130,16 +132,16 @@ var App = {
 		if (e.which !== ENTER_KEY || !val) {
 			return;
 		}
-
-		this.todos.push({
+		const todoToBeCreated: TodoDataModel = {
 			id: util.uuid(),
 			title: val,
 			completed: false
-		});
-
-		$input.val('');
-
-		this.render();
+		}
+		createTodo(todoToBeCreated).then(() => {
+			this.todos.push(todoToBeCreated);
+			$input.val('');
+			this.render();
+		})
 	},
 	toggle: function (e) {
 		var i = this.indexFromEl(e.target);
