@@ -2,7 +2,7 @@
 /// <reference path="../node_modules/@types/handlebars/index.d.ts" />
 /// <reference path="../node_modules/@types/q/index.d.ts" />
 
-import { deleteTodo, getTodos, updateTodo } from './http';
+import { createTodo, deleteTodo, getTodos, updateTodo, updateTodos } from './http';
 
 declare const Router: any;
 
@@ -80,8 +80,10 @@ var App = {
 		this.todos.forEach(function (todo) {
 			todo.completed = isChecked;
 		});
-		storage.set(this.todos);
-		this.render();
+		updateTodos(this.todos).then(() => {
+			storage.set(this.todos);
+			this.render();
+		})
 	},
 	getActiveTodos: function () {
 		return this.todos.filter(function (todo) {
@@ -130,21 +132,25 @@ var App = {
 		if (e.which !== ENTER_KEY || !val) {
 			return;
 		}
-
-		this.todos.push({
+		const todoToBeCreated: TodoDataModel = {
 			id: util.uuid(),
 			title: val,
 			completed: false
-		});
-
-		$input.val('');
-
-		this.render();
+		}
+		createTodo(todoToBeCreated).then(() => {
+			this.todos.push(todoToBeCreated);
+			$input.val('');
+			this.render();
+		})
 	},
 	toggle: function (e) {
 		var i = this.indexFromEl(e.target);
+		const id = this.todos[i].id;
+
 		this.todos[i].completed = !this.todos[i].completed;
-		this.render();
+		updateTodo(this.todos[i]).then(() => {
+			this.render()
+		});
 	},
 	edit: function (e) {
 		var $input = $(e.target).closest('li').addClass('editing').find('.edit');
@@ -164,7 +170,6 @@ var App = {
 		const $el = $(el);
 		const val = $el.val().trim();
 		const idx = this.indexFromEl(el);
-		const id = this.todos[idx].id;
 
 		if (!val) {
 			this.destroy(e);
@@ -175,7 +180,7 @@ var App = {
 			$el.data('abort', false);
 		} else {
 			this.todos[idx].title = val;
-			updateTodo(id, this.todos[idx]).then(() => {
+			updateTodo(this.todos[idx]).then(() => {
 				this.render()
 			})
 		}
