@@ -1,3 +1,9 @@
+export interface TodoDataModel {
+	id: string,
+	title: string,
+	completed: boolean
+}
+
 export const uuid = () => {
   /*jshint bitwise:false */
   var i, random;

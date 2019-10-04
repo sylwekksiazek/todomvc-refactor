@@ -2,40 +2,45 @@
 /// <reference path="../node_modules/@types/handlebars/index.d.ts" />
 /// <reference path="../node_modules/@types/q/index.d.ts" />
 
+import { deleteTodo, getTodos, updateTodo } from './http';
+
 declare const Router: any;
 
 import * as util from './utils'
 import { getStorage } from './storageManager'
+import { TodoDataModel } from './utils';
 // import * as http from './http'
 
-const StorageType = "LS"; // "HTTP"
+const StorageType = 'LS'; // "HTTP"
 
 /*global jQuery, Handlebars, Router */
 // jQuery(function ($) {
-	'use strict';
+'use strict';
 
-	Handlebars.registerHelper('eq', function (a, b, options) {
-		return a === b ? options.fn(this) : options.inverse(this);
-	});
+Handlebars.registerHelper('eq', function (a, b, options) {
+	return a === b ? options.fn(this) : options.inverse(this);
+});
 
-	var ENTER_KEY = 13;
-	var ESCAPE_KEY = 27;
-	var storage = getStorage(StorageType);
+var ENTER_KEY = 13;
+var ESCAPE_KEY = 27;
+var storage = getStorage(StorageType);
 
 var App = {
+	todos: [],
 	init: function () {
-		this.todos = storage.get('todos-jquery');
-		// http.getTodos()
-		this.todoTemplate = Handlebars.compile($('#todo-template').html());
-		this.footerTemplate = Handlebars.compile($('#footer-template').html());
-		this.bindEvents();
+		getTodos().then((res) => {
+			this.todos = res;
+			this.todoTemplate = Handlebars.compile($('#todo-template').html());
+			this.footerTemplate = Handlebars.compile($('#footer-template').html());
+			this.bindEvents();
 
-		new Router({
-			'/:filter': function (filter) {
-				this.filter = filter;
-				this.render();
-			}.bind(this)
-		}).init('/all');
+			new Router({
+				'/:filter': function (filter) {
+					this.filter = filter;
+					this.render();
+				}.bind(this)
+			}).init('/all');
+		})
 	},
 	bindEvents: function () {
 		$('#new-todo').on('keyup', this.create.bind(this));
@@ -55,7 +60,7 @@ var App = {
 		$('#toggle-all').prop('checked', this.getActiveTodos().length === 0);
 		this.renderFooter();
 		$('#new-todo').focus();
-		storage.set('todos-jquery', this.todos);
+		storage.set(this.todos);
 	},
 	renderFooter: function () {
 		var todoCount = this.todos.length;
@@ -75,7 +80,7 @@ var App = {
 		this.todos.forEach(function (todo) {
 			todo.completed = isChecked;
 		});
-		storage.set('todos-jquery', this.todos);
+		storage.set(this.todos);
 		this.render();
 	},
 	getActiveTodos: function () {
@@ -155,9 +160,11 @@ var App = {
 		}
 	},
 	update: function (e) {
-		var el = e.target;
-		var $el = $(el);
-		var val = $el.val().trim();
+		const el = e.target;
+		const $el = $(el);
+		const val = $el.val().trim();
+		const idx = this.indexFromEl(el);
+		const id = this.todos[idx].id;
 
 		if (!val) {
 			this.destroy(e);
@@ -167,14 +174,24 @@ var App = {
 		if ($el.data('abort')) {
 			$el.data('abort', false);
 		} else {
-			this.todos[this.indexFromEl(el)].title = val;
+			this.todos[idx].title = val;
+			updateTodo(id, this.todos[idx]).then(() => {
+				this.render()
+			})
 		}
 
-		this.render();
 	},
 	destroy: function (e) {
-		this.todos.splice(this.indexFromEl(e.target), 1);
-		this.render();
+		const idx = this.indexFromEl(e.target);
+		const id = this.todos[idx].id;
+
+		deleteTodo(id)
+			.then(() => {
+				this.todos.splice(idx, 1)
+				this.render();
+			});
+
+
 	}
 };
 

@@ -3,7 +3,7 @@ export const storageLS = {
 		var state = localStorage.getItem(key);
 		return (state && JSON.parse(state)) || [];
 	},
-	set: (key, value) => {
-		return localStorage.setItem(key, JSON.stringify(value));
+	set: (value) => {
+		return localStorage.setItem('todos-jquery', JSON.stringify(value));
 	}
 }
