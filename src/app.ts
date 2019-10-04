@@ -2,10 +2,13 @@
 /// <reference path="../node_modules/@types/handlebars/index.d.ts" />
 /// <reference path="../node_modules/@types/q/index.d.ts" />
 
+import { deleteTodo, getTodos } from './http';
+
 declare const Router: any;
 
 import * as util from './utils'
 import { getStorage } from './storageManager'
+import { TodoDataModel } from './utils';
 // import * as http from './http'
 
 const StorageType = "LS"; // "HTTP"
@@ -23,19 +26,21 @@ const StorageType = "LS"; // "HTTP"
 	var storage = getStorage(StorageType);
 
 var App = {
+	todos: [],
 	init: function () {
-		this.todos = storage.get('todos-jquery');
-		// http.getTodos()
-		this.todoTemplate = Handlebars.compile($('#todo-template').html());
-		this.footerTemplate = Handlebars.compile($('#footer-template').html());
-		this.bindEvents();
+		getTodos().then((res) => {
+			this.todos = res;
+			this.todoTemplate = Handlebars.compile($('#todo-template').html());
+			this.footerTemplate = Handlebars.compile($('#footer-template').html());
+			this.bindEvents();
 
-		new Router({
-			'/:filter': function (filter) {
-				this.filter = filter;
-				this.render();
-			}.bind(this)
-		}).init('/all');
+			new Router({
+				'/:filter': function (filter) {
+					this.filter = filter;
+					this.render();
+				}.bind(this)
+			}).init('/all');
+		})
 	},
 	bindEvents: function () {
 		$('#new-todo').on('keyup', this.create.bind(this));
@@ -55,7 +60,7 @@ var App = {
 		$('#toggle-all').prop('checked', this.getActiveTodos().length === 0);
 		this.renderFooter();
 		$('#new-todo').focus();
-		storage.set('todos-jquery', this.todos);
+		storage.set(this.todos);
 	},
 	renderFooter: function () {
 		var todoCount = this.todos.length;
@@ -75,7 +80,7 @@ var App = {
 		this.todos.forEach(function (todo) {
 			todo.completed = isChecked;
 		});
-		storage.set('todos-jquery', this.todos);
+		storage.set(this.todos);
 		this.render();
 	},
 	getActiveTodos: function () {
@@ -173,8 +178,16 @@ var App = {
 		this.render();
 	},
 	destroy: function (e) {
-		this.todos.splice(this.indexFromEl(e.target), 1);
-		this.render();
+		const idx = this.indexFromEl(e.target);
+		const id = this.todos[idx].id;
+
+		deleteTodo(id)
+			.then(() => {
+				this.todos.splice(idx, 1)
+				this.render();
+			});
+
+
 	}
 };
 
