@@ -10,10 +10,11 @@ export const getTodo = async (id) => {
     return response.json();
 }
 
+// TODO: Fixme :(
 export const createTodo = async (data) => {
     const response = await fetch('http://localhost:3000/todos', {
         method: 'POST',
-        body: data
+        body: JSON.stringify(data)
     })
     return response.json();
 }
@@ -25,10 +26,11 @@ export const deleteTodo = async (id) => {
     return response.json();
 }
 
-export const updateTodo = async (id, data) => {
-    const response = await fetch('http://localhost:3000/todos/' + id, {
+// TODO: Fixme :(
+export const updateTodo = async (data) => {
+    const response = await fetch('http://localhost:3000/todos/' + data.id, {
         method: 'PUT',
-        body: data
+	    body: JSON.stringify(data)
     });
     return response.json();
 }
@@ -37,7 +39,7 @@ export const updateTodo = async (id, data) => {
 export const updateTodos = async (data) => {
 	const response = await fetch('http://localhost:3000/todos', {
 		method: 'PUT',
-		body: data
+		body: JSON.stringify(data)
 	});
 	return response.json();
 }

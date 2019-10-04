@@ -145,8 +145,12 @@ var App = {
 	},
 	toggle: function (e) {
 		var i = this.indexFromEl(e.target);
+		const id = this.todos[i].id;
+
 		this.todos[i].completed = !this.todos[i].completed;
-		this.render();
+		updateTodo(this.todos[i]).then(() => {
+			this.render()
+		});
 	},
 	edit: function (e) {
 		var $input = $(e.target).closest('li').addClass('editing').find('.edit');
@@ -166,7 +170,6 @@ var App = {
 		const $el = $(el);
 		const val = $el.val().trim();
 		const idx = this.indexFromEl(el);
-		const id = this.todos[idx].id;
 
 		if (!val) {
 			this.destroy(e);
@@ -177,7 +180,7 @@ var App = {
 			$el.data('abort', false);
 		} else {
 			this.todos[idx].title = val;
-			updateTodo(id, this.todos[idx]).then(() => {
+			updateTodo(this.todos[idx]).then(() => {
 				this.render()
 			})
 		}
