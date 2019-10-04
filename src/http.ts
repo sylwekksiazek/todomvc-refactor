@@ -12,10 +12,12 @@ export const getTodo = async (id) => {
 
 // TODO: Fixme :(
 export const createTodo = async (data) => {
+	console.log(data);
     const response = await fetch('http://localhost:3000/todos', {
         method: 'POST',
         body: JSON.stringify(data)
     })
+	console.log(response);
     return response.json();
 }
 

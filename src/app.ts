@@ -7,7 +7,7 @@ import { createTodo, deleteTodo, getTodos, updateTodo, updateTodos } from './htt
 declare const Router: any;
 
 import * as util from './utils'
-import { getStorage } from './storageManager'
+// import { getStorage } from './storageManager'
 import { TodoDataModel } from './utils';
 // import * as http from './http'
 
@@ -23,7 +23,7 @@ Handlebars.registerHelper('eq', function (a, b, options) {
 
 var ENTER_KEY = 13;
 var ESCAPE_KEY = 27;
-var storage = getStorage(StorageType);
+// var storage = getStorage(StorageType);
 
 var App = {
 	todos: [],
@@ -55,12 +55,12 @@ var App = {
 	},
 	render: function () {
 		var todos = this.getFilteredTodos();
+		console.log(this.todos)
 		$('#todo-list').html(this.todoTemplate(todos));
 		$('#main').toggle(todos.length > 0);
 		$('#toggle-all').prop('checked', this.getActiveTodos().length === 0);
 		this.renderFooter();
 		$('#new-todo').focus();
-		storage.set(this.todos);
 	},
 	renderFooter: function () {
 		var todoCount = this.todos.length;
@@ -81,7 +81,6 @@ var App = {
 			todo.completed = isChecked;
 		});
 		updateTodos(this.todos).then(() => {
-			storage.set(this.todos);
 			this.render();
 		})
 	},
