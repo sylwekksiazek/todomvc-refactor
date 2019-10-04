@@ -6,7 +6,7 @@ declare const Router: any;
 
 import * as util from './utils'
 import { getStorage } from './storageManager'
-import * as http from './http'
+// import * as http from './http'
 
 const StorageType = "LS"; // "HTTP"
 
@@ -20,11 +20,11 @@ const StorageType = "LS"; // "HTTP"
 
 	var ENTER_KEY = 13;
 	var ESCAPE_KEY = 27;
+	var storage = getStorage(StorageType);
 
 var App = {
 	init: function () {
-		var storage = getStorage(StorageType);
-		this.todos = store.get('todos-jquery');
+		this.todos = storage.get('todos-jquery');
 		// http.getTodos()
 		this.todoTemplate = Handlebars.compile($('#todo-template').html());
 		this.footerTemplate = Handlebars.compile($('#footer-template').html());
@@ -55,7 +55,7 @@ var App = {
 		$('#toggle-all').prop('checked', this.getActiveTodos().length === 0);
 		this.renderFooter();
 		$('#new-todo').focus();
-		store.set('todos-jquery', this.todos);
+		storage.set('todos-jquery', this.todos);
 	},
 	renderFooter: function () {
 		var todoCount = this.todos.length;
@@ -75,7 +75,7 @@ var App = {
 		this.todos.forEach(function (todo) {
 			todo.completed = isChecked;
 		});
-		store.set('todos-jquery', this.todos);
+		storage.set('todos-jquery', this.todos);
 		this.render();
 	},
 	getActiveTodos: function () {
